@@ -11,7 +11,7 @@ def load_urls4check(path):
 
 def is_server_respond_with_200(url):
     status_is_200 = 200
-    return (requests.get(url)).status_code == status_is_200
+    return requests.get(url).status_code == status_is_200
 
 
 def get_domain_expiration_date(domain_name):
