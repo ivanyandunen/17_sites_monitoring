@@ -9,12 +9,7 @@ def get_urls4check(path):
         return urls_list.read().split('\n')
 
 
-def is_server_respond_with_200(url):
-    ok_status = 200
-    return requests.get(url).status_code == ok_status
-
-
-def get_domain_expiration_date(domain_name, days):
+def domain_is_paid(domain_name, days):
     number_of_days = datetime.datetime.now() + datetime.timedelta(days=days)
     domain = whois.whois(domain_name)
     try:
@@ -56,8 +51,8 @@ if __name__ == '__main__':
         args = get_parser_args()
         urls_list = get_urls4check(args.inputfile)
         for url in urls_list:
-            status = is_server_respond_with_200(url)
-            expiration = get_domain_expiration_date(url, args.days)
+            status = requests.get(url).ok
+            expiration = domain_is_paid(url, args.days)
             print_domains_statuses(url, status, expiration)
     except UnicodeDecodeError:
         print('Incorrect input file')
